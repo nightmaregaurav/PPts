@@ -1,0 +1,35 @@
+<script>
+    function msg_close(node){
+        node.parentElement.remove();
+    }
+    let goToTopBtn = document.getElementById("goToTopWrap");
+    window.addEventListener('scroll', scrollFunction);
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            goToTopBtn.style.display = "block";
+        } else {
+            goToTopBtn.style.display = "none";
+        }
+    }
+    function goToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+    window.addEventListener('load', hideLoader);
+    function hideLoader(){
+        let splash = document.getElementById('splash-loader-overlay');
+        for (let i=1.0; i>=0; i-=0.001){
+            splash.style.opacity = i.toString();
+        }
+        splash.style.opacity = '0';
+        splash.style.display = 'none';
+    }
+    function showLoader(){
+        let splash = document.getElementById('splash-loader-overlay');
+        for (let i=0.0; i<=1; i+=0.001){
+            splash.style.opacity = i.toString();
+        }
+        splash.style.opacity = '1';
+        splash.style.display = '';
+    }
+</script>

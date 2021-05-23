@@ -1,0 +1,39 @@
+.rank-cell{
+	width: fit-content !important;
+}
+.rank-cell:not(.head){
+	background-image: radial-gradient(#3c013c, #212529) !important;
+}
+.team-cell{
+	min-width: 150px !important;
+	width: fit-content !important;
+}
+.placement-pts-cell{
+	width: fit-content !important;
+}
+.kill-pts-cell{
+	width: fit-content !important;
+}
+.total-pts-cell.head{
+	width: fit-content !important;
+}
+.chicken-dinner-cell{
+	width: fit-content !important;
+}
+table{
+	width: fit-content !important;
+}
+
+@font-face {
+	font-family: 'headliner_no._45regular';
+	/*noinspection CssUnknownTarget*/
+	src: url('/static/Site/font/headlinerno.45-webfont.woff2') format('woff2'), url('/static/Site/font/headlinerno.45-webfont.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+body{
+	font-family: cursive, "sans-serif";
+}
+thead{
+	font-family: "headliner_no._45regular", "sans-serif";
+}

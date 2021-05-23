@@ -1,0 +1,29 @@
+{% extends BASE_URL %}
+{% load var %}
+{% block body_tag %}<body style="background-image: url('{{ STATIC_URL|concat:'Site/img/pubg_bg.jpg' }}'); background-position: center; background-repeat: no-repeat; background-size: cover;">{% endblock body_tag %}
+{% block content %}
+    <div class="container wow py-2 px-4" style="width: fit-content; font-family: sans-serif; background-color: rgba(145, 56, 139, 0.7); border-radius: 10px; color: antiquewhite;">
+        <div class="text-center"><h3>Search Rank Table</h3></div>
+        <div>
+            <div class="p-2 mt-4" style="border: 1px solid gold;">
+                <label for="hostSelect" class="form-label">Select Host:</label>
+                <select class="form-select mb-2" aria-label="Select Host" id="hostSelect" onchange="host_changed(this);">
+                    <option value="initial" selected>Click to select</option>
+                    {% for host in hosts %}
+                    <option value="{{ host.id }}">{{ host.username }}</option>
+                    {% endfor %}
+                </select>
+                <label for="tournamentSelect" class="form-label mt-2">Select Tournament:</label>
+                <select class="form-select mb-2" aria-label="Select Tournament" id="tournamentSelect" onchange="tournament_changed(this);">
+                    <option value="initial" selected>Select Host First</option>
+                </select>
+                <label for="matchSelect" class="form-label mt-2">Select Match:</label>
+                <select class="form-select mb-2" aria-label="Select Match" id="matchSelect">
+                    <option value="initial" selected>Select Tournament First</option>
+                </select>
+            </div>
+            <div id="formerr" class="form-text" style="color: ghostwhite;"><b></b></div>
+            <div class="text-center my-3"><button class="btn btn-primary" onclick="searchClicked();">Search</button></div>
+        </div>
+    </div>
+{% endblock content %}

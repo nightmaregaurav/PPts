@@ -1,0 +1,170 @@
+{% extends BASE_URL %}
+{% load tournament_info %}
+{% load var %}
+{% load table_manager %}
+{% block nav %}{% endblock nav %}
+
+{% block body_tag %}<body class="bg-dark wow fadeIn" style="width: 2400px; overflow: auto;">{% endblock body_tag %}
+{% block content %}
+    {% var object_list|break_table as object_list_list %}
+    {% var tournament|get_details:match_number as info %}
+    <div class="d-flex justify-content-center align-items-center text-light wow fadeIn mt-5 mb-3">
+        <div class="mx-auto d-flex flex-column justify-content-center align-items-center" id="tableDiv" style="{% if info.background_image.exists %}background-image: url('{{ info.background_image.data.url }}'); background-repeat: no-repeat; background-position: center; background-size: cover;{% endif %}">
+            <div class="row d-flex flex-row flex-nowrap justify-content-between" style="width: 100%!important;">
+                <div class="col-auto m-3 d-flex flex-row justify-content-md-start">
+                    {% if info.top_left_image.exists %}<img src="{{ info.top_left_image.data.url }}" alt='' style="height: 100pt;">{% endif %}
+                </div>
+                <div class="col-auto m-3 d-flex flex-row justify-content-center">
+                    <div class="d-flex flex-column justify-content-center">
+                        <div style='font-family: Arial sans-serif times; font-size: 30pt; color: gold; font-weight: bold; text-align: center;'>{{ tournament.name|upper }}</div>
+                        <div style='font-family: Arial sans-serif times; font-size: 20pt; color: gold; font-weight: bold; text-align: center;'>OVERALL RANKING</div>
+                        <div style='font-family: Arial sans-serif times; font-size: 18pt; color: gold; font-weight: bold; text-align: center;'>MATCH {{ match_number }} OF {{ match_number_max }}</div>
+                        <div style='font-family: Arial sans-serif times; font-size: 10pt; color: white; font-weight: bold; text-align: center;'>PAGE {{ page_obj.number }} OF {{ page_obj.paginator.num_pages }}</div>
+                    </div>
+                </div>
+                <div class="col-auto m-3 d-flex flex-row justify-content-md-end">
+                    {% if info.top_right_image.exists %}<img src="{{ info.top_right_image.data.url }}" alt='' style="height: 100pt;">{% endif %}
+                </div>
+            </div>
+
+            <div class="py-3 px-1 m-0 d-flex flex-row justify-content-center align-items-center" style="font-size: 18pt; position: relative">
+                {% for table in object_list_list %}
+                <table class="table text-white border-warning mx-2 my-3" style="width: fit-content">
+                    <thead style="background-image: repeating-linear-gradient(164deg, gold, #ffc107e6 100px); color: black; font-size: 110%;">
+                        <tr class="text-center">
+                            <th class="rank-cell head">RANK</th>
+                            <th class="team-cell head">TEAM</th>
+                            <th class="placement-pts-cell head">PLACEMENT PTS</th>
+                            <th class="kill-pts-cell head">KILL PTS</th>
+                            <th colspan='2' class="total-pts-cell head">TOTAL PTS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rank in table %}
+                        <tr style="background-image: linear-gradient(47deg, {{ rank.gradient_color }}, transparent) !important; background-repeat: no-repeat !important; background-size: 50% !important;">
+                            <th class="text-center rank-cell">&nbsp;<i class="fas {{ rank.rank_tag}}"></i>&nbsp;&nbsp;<span style="font-family: sans-serif;">#</span>&nbsp;{{ rank.rank }}</th>
+                            <td class="team-cell">{{ rank.squad }}</td>
+                            <td class="text-center placement-pts-cell">{{ rank.gross_placement_pts }} {{ rank.placement_pts|sign|safe }}</td>
+                            <td class="text-center kill-pts-cell">{{ rank.gross_kill_pts }} {{ rank.kill_pts|sign|safe }}</td>
+                            <td {% if not rank.have_dinner %}colspan='2'{% endif %} class="total-pts-cell">&nbsp;&nbsp;&nbsp;{{ rank.gross_total_pts }} {{ rank.total_pts|sign|safe }}</td>
+                            {% if rank.have_dinner %}<td class="chicken-dinner-cell"><img src="{{ STATIC_URL|concat:'Site/img/chicken-leg.svg' }}" class="" alt="" height="25px" style="position: relative; top:-4px">&nbsp;x{{ rank.chicken_dinner }}</td>{% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% empty %}
+                <h3 class="text-warning text-center">No Rankings Yet.</h3>
+                {% endfor %}
+            </div>
+
+            <div class="row d-flex flex-row flex-nowrap justify-content-between" style='padding-left:5px; padding-right:5px; font-family: Arial sans-serif times; font-size: 10pt; color: white; font-weight: bold; max-width: 100%!important;'>
+                <div class="col-auto m-3 d-flex flex-column justify-content-start">
+                    <div class="d-flex flex-row flex-wrap justify-content-start">
+                        {% if info.bottom_left_text.exists %}{{ info.bottom_left_text.data|upper }}{% endif %}
+                    </div>
+                    <div class="d-flex flex-row flex-wrap justify-content-start">
+                        {% if info.bottom_left_images.exists %}{% for img in info.bottom_left_images.data %}
+                        <img class="mx-1" src="{{ img.image.url }}" alt='' style="height: 75pt;">
+                        {% endfor %}{% endif %}
+                    </div>
+                </div>
+                <div class="col-auto m-3 d-flex flex-column justify-content-center">
+                    <div class="d-flex flex-row flex-wrap justify-content-center">
+                        {% if info.bottom_center_text.exists %}{{ info.bottom_center_text.data|upper }}{% endif %}
+                    </div>
+                    <div class="d-flex flex-row flex-wrap justify-content-center">
+                        {% if info.bottom_center_images.exists %}{% for img in info.bottom_center_images.data %}
+                        <img class="mx-1" src="{{ img.image.url }}" alt='' style="height: 75pt;">
+                        {% endfor %}{% endif %}
+                    </div>
+                </div>
+                <div class="col-auto m-3 d-flex flex-column justify-content-end">
+                    <div class="d-flex flex-row flex-wrap justify-content-end">
+                        {% if info.bottom_right_text.exists %}{{ info.bottom_right_text.data|upper }}{% endif %}
+                    </div>
+                    <div class="d-flex flex-row flex-wrap justify-content-end">
+                        {% if info.bottom_right_images.exists %}{% for img in info.bottom_right_images.data %}
+                        <img class="mx-1" src="{{ img.image.url }}" alt='' style="height: 75pt;">
+                        {% endfor %}{% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if is_paginated or have_other_match %}
+    <div class="d-flex justify-content-center align-items-center text-light wow fadeIn mb-3">
+        <div>
+            {% if is_paginated %}
+            <div class="text-center">
+                <nav class="d-flex justify-content-center">
+                    <ul class="pagination pg-blue">
+                        {% if page_obj.has_previous %}
+                        <!--Arrow left-->
+                        {% if page_obj.previous_page_number != 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" aria-label="First" data-toggle="tooltip" title="Jump to first page">
+                                <span aria-hidden="true" style="position:relative; top: -3px;">&laquo;</span>
+                                <span class="sr-only">First</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">{{ page_obj.previous_page_number }}
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li class="page-item active">
+                            <a class="page-link" href="?page={{ page_obj.number }}">{{ page_obj.number }}
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">{{ page_obj.next_page_number }}
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                        {% if page_obj.next_page_number != page_obj.paginator.num_pages %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last" data-toggle="tooltip" title="Jump to last page">
+                                <span aria-hidden="true" style="position:relative; top: -3px;">&raquo;</span>
+                                <span class="sr-only">Last</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            {% endif %}
+            {% if have_other_match %}
+            <div class="text-center mt-5">
+                <nav class="d-flex justify-content-center">
+                    <div class="pagination pg-blue d-flex justify-content-between w-100">
+                        <div class="page-item">
+                            {% if have_prev_match %}
+                            <a class="page-link" href="{% url 'Site:rank' tournament.id prev_match_no %}" aria-label="Prev">
+                                <span aria-hidden="true" class="mr-2" style="position:relative; top: -3px;">&laquo;</span>Prev Match
+                                <span class="sr-only">Previous Match</span>
+                            </a>
+                            {% endif %}
+                        </div>
+                        <div class="page-item">
+                            {% if have_next_match %}
+                            <a class="page-link" href="{% url 'Site:rank' tournament.id next_match_no %}" aria-label="Next">
+                                <span aria-hidden="true" class="mr-2" style="position:relative; top: -3px;">&raquo;</span>Next Match
+                                <span class="sr-only">Next Match</span>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+{% endblock content %}
+{% block gototop %}{% endblock gototop %}
+{% block footer %}{% endblock footer %}

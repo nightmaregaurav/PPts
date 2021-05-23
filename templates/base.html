@@ -1,0 +1,45 @@
+{% load template_utils %}
+{% load var %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    {% block meta %}{% endblock meta %}
+    <title>{% block head_title %}{% if title %}{{ title }}{% endif %}{% if title and site_setting.site_title %} | {% endif %}{% if site_setting.site_title %}{{ site_setting.site_title }}{% endif %}{% endblock head_title %}</title>
+    {% block extra_head %}{% endblock extra_head %}
+    <link rel="shortcut icon" type="image/png" href="{% if site_setting.site_logo %}{{ site_setting.site_logo.url }}{% else %}{{ STATIC_URL }}favicon.png{% endif %}"/>
+    {% block main_css %}{% include 'main-css.html' %}{% endblock main_css %}
+    {% block app_css %}{% var APP_URL|concat:'css.html' as app_css_html %}{% if app_css_html|template_exists %}{% include app_css_html %}{% endif %}{% endblock app_css %}
+    {% block style %}{% endblock style %}
+    {% block base_css %}{% include 'base-css.html' %}{% endblock base_css %}
+
+</head>
+{% block body_tag %}<body>{% endblock body_tag %}
+    <div class="loader-splash" id="splash-loader-overlay"><div class="loader"><div class="square"></div><div class="path"><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div><span aria-label="Loading..."></span></div></div>
+    <div id="base-contents">
+        <div id="base-content-1">
+            {% block nav %}{% include 'nav.html' %}{% endblock nav %}
+            {% block messages %}{% if messages %}{% for message in messages %}<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">{{ message }}<button type="button" class="close" onclick="msg_close(this)" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>{% endfor %}{% endif %}{% endblock messages %}
+        </div>
+        <div id="base-content-2">
+            <div style="width: 100%!important;">
+            {% block body %}
+                {% block content  %}{% endblock content %}
+            {% endblock body %}
+            {% block extra_body %}{% endblock extra_body %}
+            </div>
+        </div>
+        <div id="base-content-3">
+            {% block footer %}{% include 'footer.html' %}{% endblock footer %}
+            {% block gototop %}<div id="goToTopWrap" onclick="goToTop();"><div id="goToTopArrow"><span id="goToTop-left-wing"></span><span id="goToTop-right-wing"></span></div></div>{% endblock gototop %}
+            {% csrf_token %}
+        </div>
+    </div>
+    {% block main_js %}{% include 'main-js.html' %}{% endblock main_js %}
+    {% block app_js %}{% var APP_URL|concat:'js.html' as app_js_html %}{% if app_js_html|template_exists %}{% include app_js_html %}{% endif %}{% endblock app_js %}
+    {% block script %}{% endblock script %}
+    {% block base_js %}{% include 'base-js.html' %}{% endblock base_js %}
+</body>
+</html>
